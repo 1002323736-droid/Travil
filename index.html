@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Rubik:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #e8edf7;
+      --muted: #94a1b8;
+      --line: rgba(255, 255, 255, .1);
+      --paper: #131a2c;
+      --sun: #f59e0b;
+      --sea: #14b8a6;
+      --sky: #6366f1;
+      --rose: #ef4444;
+      --leaf: #22c55e;
+      --soft: #0a0e18;
+      --shadow: 0 20px 50px -18px rgba(0, 0, 0, .65);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: 'Heebo', Arial, "Helvetica Neue", sans-serif;
+      background: radial-gradient(1100px 640px at 84% -10%, #1b2747 0%, var(--soft) 56%);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 46px;
+      border-radius: 14px;
+      color: #ffffff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--sea), var(--sky));
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 800;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status-pill {
+      border: 1px solid rgba(20, 184, 166, .35);
+      color: #7ed3c0;
+      background: rgba(20, 184, 166, .12);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 280px;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(10, 14, 24, .55), rgba(10, 14, 24, .78)),
+        url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=80") center/cover;
+      color: #ffffff;
+      margin: 0 0 18px;
+      padding: 46px 18px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero h2 {
+      margin: 0 auto;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 900;
+      font-size: clamp(32px, 7vw, 64px);
+      line-height: 1.03;
+      letter-spacing: 0;
+      max-width: 780px;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, .65);
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 14px auto 0;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, .9);
+      text-shadow: 0 2px 16px rgba(0, 0, 0, .5);
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .action {
+      min-height: 72px;
+      border: 0;
+      border-radius: var(--radius);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #ffffff;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .action:hover,
+    .action:focus {
+      transform: translateY(-3px);
+      filter: brightness(1.08);
+    }
+
+    .action svg,
+    .icon-btn svg,
+    .tab svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.4;
+    }
+
+    .action.trip { background: linear-gradient(135deg, #60a5fa, #3b82f6); box-shadow: 0 12px 26px -8px rgba(59, 130, 246, .55); }
+    .action.location { background: linear-gradient(135deg, #4ade80, #22c55e); box-shadow: 0 12px 26px -8px rgba(34, 197, 94, .55); }
+    .action.stay { background: linear-gradient(135deg, #2dd4bf, #14b8a6); box-shadow: 0 12px 26px -8px rgba(20, 184, 166, .55); }
+    .action.translate { background: linear-gradient(135deg, #a78bfa, #8b5cf6); box-shadow: 0 12px 26px -8px rgba(139, 92, 246, .55); }
+    .action.emergency { background: linear-gradient(135deg, #f87171, #ef4444); box-shadow: 0 12px 26px -8px rgba(239, 68, 56, .55); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .tabs {
+      position: sticky;
+      top: 12px;
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .tab {
+      border: 1px solid transparent;
+      border-radius: 13px;
+      padding: 12px 14px;
+      color: #b7c1d6;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 14.5px;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .tab:hover {
+      background: rgba(255, 255, 255, .06);
+      color: #ffffff;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, var(--sky), #22d3ee);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 8px 20px -8px rgba(99, 102, 241, .7);
+    }
+
+    .panel {
+      display: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+    }
+
+    .panel-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      color: #9aa6bd;
+      font-weight: 600;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 12px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, .04);
+      color: var(--ink);
+      outline: none;
+      min-height: 44px;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--sky);
+      background: rgba(255, 255, 255, .07);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, .18);
+    }
+
+    select option {
+      background: #131a2c;
+      color: #e8edf7;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      color-scheme: dark;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, .1);
+      transition: filter .15s ease, transform .15s ease;
+    }
+
+    .btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .btn.primary { background: linear-gradient(135deg, #60a5fa, #3b82f6); box-shadow: 0 8px 20px -8px rgba(59, 130, 246, .6); }
+    .btn.good { background: linear-gradient(135deg, #4ade80, #22c55e); color: #06281a; box-shadow: 0 8px 20px -8px rgba(34, 197, 94, .6); }
+    .btn.warn { background: linear-gradient(135deg, #fbbf24, var(--sun)); color: #342500; box-shadow: 0 8px 20px -8px rgba(245, 158, 11, .6); }
+    .btn.danger { background: linear-gradient(135deg, #f87171, var(--rose)); box-shadow: 0 8px 20px -8px rgba(239, 68, 56, .6); }
+    .btn.light {
+      color: #cfd8ea;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      min-height: 116px;
+    }
+
+    .card strong {
+      display: block;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .card span,
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .metric-band {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      color: var(--ink);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 94px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-align: right;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .metric:hover,
+    .metric:focus {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+      outline: none;
+    }
+
+    .metric b {
+      font-family: 'Rubik', sans-serif;
+      font-weight: 900;
+      font-size: 30px;
+    }
+
+    .metric span {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .metric:nth-child(1) { background: linear-gradient(160deg, rgba(59, 130, 246, .16), rgba(59, 130, 246, .04)); border-color: rgba(59, 130, 246, .28); }
+    .metric:nth-child(1) b { color: #60a5fa; }
+    .metric:nth-child(1) span { color: #9bafce; }
+
+    .metric:nth-child(2) { background: linear-gradient(160deg, rgba(20, 184, 166, .16), rgba(20, 184, 166, .04)); border-color: rgba(20, 184, 166, .28); }
+    .metric:nth-child(2) b { color: #2dd4bf; }
+    .metric:nth-child(2) span { color: #94bdb6; }
+
+    .metric:nth-child(3) { background: linear-gradient(160deg, rgba(239, 68, 56, .16), rgba(239, 68, 56, .04)); border-color: rgba(239, 68, 56, .28); }
+    .metric:nth-child(3) b { color: #f87171; }
+    .metric:nth-child(3) span { color: #c7a3a0; }
+
+    .metric:nth-child(4) { background: linear-gradient(160deg, rgba(139, 92, 246, .16), rgba(139, 92, 246, .04)); border-color: rgba(139, 92, 246, .28); }
+    .metric:nth-child(4) b { color: #a78bfa; }
+    .metric:nth-child(4) span { color: #aaa0c4; }
+
+    .metric:nth-child(5) { background: linear-gradient(160deg, rgba(34, 197, 94, .16), rgba(34, 197, 94, .04)); border-color: rgba(34, 197, 94, .28); }
+    .metric:nth-child(5) b { color: #4ade80; }
+    .metric:nth-child(5) span { color: #9fb6a8; }
+
+    .saved-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin: 0 0 16px;
+    }
+
+    .saved-panel h3 {
+      margin: 0 0 6px;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .saved-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .delete-btn {
+      border: 1px solid rgba(239, 68, 56, .35);
+      border-radius: 12px;
+      background: rgba(239, 68, 56, .12);
+      color: #f87171;
+      padding: 8px 10px;
+      font-weight: 700;
+    }
+
+    .location-banner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(180deg, var(--paper), rgba(19, 26, 44, 0));
+      border: 1px solid var(--line);
+      border-right: 5px solid var(--leaf);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .location-banner strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .location-banner p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .navigation-box {
+      background: linear-gradient(180deg, var(--paper), rgba(19, 26, 44, 0));
+      border: 1px solid var(--line);
+      border-right: 5px solid var(--sky);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .navigation-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .navigation-box p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .nav-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .suggestion-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .suggestion {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 13px;
+      transition: transform .15s ease, border-color .15s ease;
+      display: grid;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .suggestion:hover {
+      transform: translateY(-4px);
+      border-color: rgba(45, 212, 191, .6);
+    }
+
+    .suggestion b {
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .suggestion small {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .translated-box {
+      background: #050b14;
+      color: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-top: 14px;
+      min-height: 150px;
+      display: grid;
+      align-content: center;
+      line-height: 1.55;
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800;
+    }
+
+    .conversation-box {
+      background: linear-gradient(180deg, var(--paper), rgba(19, 26, 44, 0));
+      border: 1px solid var(--line);
+      border-right: 5px solid #8b5cf6;
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .conversation-box strong {
+      display: block;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .conversation-box p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .conversation-result {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .speech-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .speech-card b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #9aa6bd;
+    }
+
+    .speech-card div {
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .local-view {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      background: #ffffff;
+      color: #101820;
+      padding: 22px;
+    }
+
+    .local-view.open {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+    }
+
+    .local-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .local-text {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: clamp(34px, 8vw, 86px);
+      line-height: 1.18;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .emergency-strip {
+      background: rgba(239, 68, 56, .12);
+      border: 1px solid rgba(239, 68, 56, .35);
+      color: #fca5a5;
+      padding: 14px;
+      border-radius: var(--radius);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      background: #101820;
+      color: #ffffff;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .2s ease;
+      max-width: calc(100vw - 36px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(5, 8, 14, .72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal-box {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-box h3 {
+      margin: 0 0 8px;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+    }
+
+    .modal-box p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .app-footer {
+      text-align: center;
+      padding: 22px 12px 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .quick-actions,
+      .metric-band,
+      .cards,
+      .suggestion-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        position: static;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .tab {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        padding: 12px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .status-pill {
+        display: none;
+      }
+
+      .hero {
+        margin: 0 -12px 14px;
+        padding: 34px 12px 22px;
+        min-height: 230px;
+      }
+
+      .quick-actions,
+      .metric-band,
+      .cards,
+      .grid,
+      .grid.three,
+      .suggestion-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        display: flex;
+        overflow-x: auto;
+        padding: 8px;
+      }
+
+      .tab {
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .location-banner {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>
+          <h1>Travil</h1>
+          <p>הזיכרון והעוזר האישי שלך בכל טיול</p>
+        </div>
+      </div>
+      <div class="status-pill" id="connectionStatus">בודק חיבור למאגר</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <h2>לטייל רגוע, לזכור הכל, ולהסתדר בכל שפה.</h2>
+        <p>שמור טיולים, מלונות, מסעדות, מקומות, טיסות ומשפטים חשובים. Travil לומדת מה אהבת כדי לעזור לך טוב יותר בפעם הבאה.</p>
+      </div>
+    </section>
+
+    <section class="quick-actions" aria-label="פעולות מהירות">
+      <button class="action location" id="saveLocationTopBtn">📌 שמור מיקום נוכחי</button>
+      <button class="action trip" data-open="tripPanel">✈️ טיול חדש</button>
+      <button class="action stay" data-open="stayPanel">🏨 שמירת לינה</button>
+      <button class="action translate" data-open="translatePanel">🗣️ תרגום ודיבור</button>
+      <button class="action emergency" data-open="emergencyPanel">🚨 מצב חירום</button>
+    </section>
+
+    <main class="layout">
+      <nav class="tabs" aria-label="תפריט">
+        <button class="tab active" data-open="homePanel">🏠 בית</button>
+        <button class="tab" data-open="tripPanel">✈️ טיולים</button>
+        <button class="tab" data-open="stayPanel">🏨 לינה</button>
+        <button class="tab" data-open="placesPanel">📍 מקומות</button>
+        <button class="tab" data-open="translatePanel">🗣️ תרגום</button>
+        <button class="tab" data-open="flightsPanel">🛫 טיסות</button>
+        <button class="tab" data-open="emergencyPanel">🚨 חירום</button>
+        <button class="tab" data-open="memoryPanel">🔎 זיכרון</button>
+        <button class="tab" data-open="dayPlanPanel">✨ תכנון היום</button>
+      </nav>
+
+      <section>
+        <div class="panel active" id="homePanel">
+          <div class="panel-title">
+            <div>
+              <h3>לוח בקרה</h3>
+              <p>מבט מהיר על כל מה שנשמר במאגר הטיולים שלך.</p>
+            </div>
+            <button class="btn light" id="refreshBtn">רענן</button>
+          </div>
+
+          <div class="location-banner">
+            <div>
+              <strong>דבר ראשון: שמור איפה אתה נמצא עכשיו</strong>
+              <p id="lastLocationText">עדיין לא נשמר מיקום. כשתלחץ, Travil תשמור קישור מפה וזמן במאגר.</p>
+            </div>
+            <button class="btn good" id="saveLocationHomeBtn">📌 שמור מיקום</button>
+          </div>
+
+          <div class="navigation-box">
+            <strong>לאן אתה רוצה להגיע?</strong>
+            <p>כתוב יעד או שם מקום, ואז בחר באיזו אפליקציה לנווט. בבטומי עדיף Google Maps, ובמקומות שבהם Waze עובד אפשר לבחור Waze.</p>
+            <div class="nav-form">
+              <input id="destinationInput" placeholder="לדוגמה: Batumi Piazza או שם מסעדה">
+              <button class="btn light" id="mapSearchBtn" type="button">🔎 חפש במפות</button>
+              <button class="btn primary" id="googleNavigateBtn" type="button">🗺️ Google Maps</button>
+              <button class="btn good" id="wazeNavigateBtn" type="button">🚗 Waze</button>
+            </div>
+          </div>
+
+          <div class="metric-band">
+            <div class="metric" data-dashboard-list="trips" role="button" tabindex="0"><b id="tripCount">0</b><span>טיולים</span></div>
+            <div class="metric" data-dashboard-list="stays" role="button" tabindex="0"><b id="stayCount">0</b><span>מקומות לינה</span></div>
+            <div class="metric" data-dashboard-list="places" role="button" tabindex="0"><b id="placeCount">0</b><span>מקומות ומשובים</span></div>
+            <div class="metric" data-dashboard-list="phrases" role="button" tabindex="0"><b id="phraseCount">0</b><span>משפטים שמורים</span></div>
+            <div class="metric" data-dashboard-list="locations" role="button" tabindex="0"><b id="locationCount">0</b><span>מיקומים שמורים</span></div>
+          </div>
+
+          <div class="saved-panel hidden" id="dashboardSavedPanel">
+            <h3 id="dashboardSavedTitle">מה שמור במאגר</h3>
+            <p id="dashboardSavedSubtitle">לחץ על אחד הכפתורים למעלה כדי לראות את הרשימה.</p>
+            <div class="cards" id="dashboardSavedCards"></div>
+          </div>
+
+          <div class="panel-title">
+            <div>
+              <h3>מה תרצה למצוא עכשיו?</h3>
+              <p>כפתורים אלו פותחים חיפוש מהיר סביבך או שומרים מקום לביקור חוזר.</p>
+            </div>
+          </div>
+
+          <div class="suggestion-grid">
+            <button class="suggestion" data-nearby="restaurants"><b>מסעדות קרובות</b><small>אוכל מקומי, בתי קפה, מקומות פתוחים עכשיו</small></button>
+            <button class="suggestion" data-nearby="tourist attractions"><b>מקומות לטייל</b><small>אתרים, נופים, מוזיאונים ואטרקציות</small></button>
+            <button class="suggestion" data-nearby="gas stations"><b>תחנות דלק</b><small>שימושי כשמטיילים עם רכב</small></button>
+            <button class="suggestion" data-nearby="car repair"><b>מוסכים</b><small>עזרה מהירה במקרה תקלה בדרך</small></button>
+            <button class="suggestion" data-nearby="pharmacy"><b>בית מרקחת</b><small>תרופות, ציוד בסיסי ועזרה רפואית קלה</small></button>
+            <button class="suggestion" data-nearby="hospital"><b>בית חולים</b><small>למצבי חירום או צורך רפואי</small></button>
+            <button class="suggestion" data-nearby="police station"><b>משטרה</b><small>אובדן מסמך, בעיה בדרך או עזרה רשמית</small></button>
+            <button class="suggestion" data-nearby="atm"><b>כספומט</b><small>משיכת כסף קרוב למיקום שלך</small></button>
+          </div>
+        </div>
+
+        <div class="panel" id="tripPanel">
+          <div class="panel-title">
+            <div>
+              <h3>טיול חדש</h3>
+              <p>שמור את היעד, התאריכים והשפה המקומית כדי שכל שאר המסכים יעבדו סביב אותו טיול.</p>
+            </div>
+          </div>
+
+          <form id="tripForm" class="grid">
+            <div class="field"><label>מדינה</label><input name="country" placeholder="גאורגיה"></div>
+            <div class="field"><label>עיר</label><input name="city" placeholder="בטומי"></div>
+            <div class="field"><label>תאריך התחלה</label><input name="startDate" type="date"></div>
+            <div class="field"><label>תאריך סיום</label><input name="endDate" type="date"></div>
+            <div class="field"><label>שפה מקומית</label>
+              <select name="language">
+                <option value="ka">גאורגית</option>
+                <option value="en">אנגלית</option>
+                <option value="ru">רוסית</option>
+                <option value="tr">טורקית</option>
+                <option value="ar">ערבית</option>
+                <option value="fr">צרפתית</option>
+                <option value="es">ספרדית</option>
+              </select>
+            </div>
+            <div class="field full"><label>הערות</label><textarea name="notes" placeholder="למשל: טיול עם משפחה, אוהבים אוכל מקומי ונופים"></textarea></div>
+            <div class="button-row field full">
+              <button class="btn primary" type="submit">שמור טיול</button>
+              <button class="btn light cancel-btn" type="button">ביטול</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel" id="stayPanel">
+          <div class="panel-title">
+            <div>
+              <h3>מקום לינה</h3>
+              <p>זה המקום שהאפליקציה תדע להחזיר אותך אליו ותציג במצב חירום.</p>
+            </div>
+          </div>
+
+          <form id="stayForm" class="grid">
+            <div class="field"><label>טיול</label><select name="tripId" data-trip-select></select></div>
+            <div class="field"><label>שם מלון / דירה</label><input name="name" placeholder="Hilton Batumi"></div>
+            <div class="field"><label>מדינה</label><input name="country" placeholder="Georgia"></div>
+            <div class="field"><label>עיר</label><input name="city" placeholder="Batumi"></div>
+            <div class="field full"><label>כתובת מלאה</label><input name="address" placeholder="רחוב, מספר, אזור"></div>
+            <div class="field"><label>טלפון</label><input name="phone" placeholder="+995..."></div>
+            <div class="field"><label>חדר</label><input name="room" placeholder="204"></div>
+            <div class="field full"><label>קישור מפה</label><input name="mapUrl" placeholder="אפשר להדביק קישור Google Maps"></div>
+            <div class="field full"><label>הערות</label><textarea name="notes"></textarea></div>
+            <div class="field"><label><input name="isCurrent" type="checkbox" checked> מקום הלינה הנוכחי שלי</label></div>
+            <div class="button-row field full">
+              <button class="btn good" type="submit">שמור לינה</button>
+              <button class="btn light cancel-btn" type="button">ביטול</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel" id="placesPanel">
+          <div class="panel-title">
+            <div>
+              <h3>מקומות ומשוב</h3>
+              <p>שמור כל מקום שביקרת בו כדי ש־Travil תזכור אם להציע אותו שוב בעתיד.</p>
+            </div>
+          </div>
+
+          <form id="placeForm" class="grid">
+            <div class="field"><label>טיול</label><select name="tripId" data-trip-select></select></div>
+            <div class="field"><label>שם המקום</label><input name="name" placeholder="מסעדה / אתר / חנות"></div>
+            <div class="field"><label>סוג</label>
+              <select name="type">
+                <option>מסעדה</option>
+                <option>בית קפה</option>
+                <option>אתר טיול</option>
+                <option>מוזיאון</option>
+                <option>מלון</option>
+                <option>תחנת דלק</option>
+                <option>מוסך</option>
+                <option>חנות</option>
+                <option>אחר</option>
+              </select>
+            </div>
+            <div class="field"><label>דירוג</label><select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+            <div class="field"><label>מדינה</label><input name="country"></div>
+            <div class="field"><label>עיר</label><input name="city"></div>
+            <div class="field full"><label>כתובת</label><input name="address"></div>
+            <div class="field"><label><input name="wouldReturn" type="checkbox" checked> אחזור לשם</label></div>
+            <div class="field"><label><input name="recommended" type="checkbox" checked> מומלץ להציע שוב</label></div>
+            <div class="field full"><label>משוב והערות</label><textarea name="notes" placeholder="מה אהבתי, מה לא, מה הזמנתי, מתאים למי"></textarea></div>
+            <div class="button-row field full">
+              <button class="btn primary" type="submit">שמור מקום ומשוב</button>
+              <button class="btn light cancel-btn" type="button">ביטול</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel" id="translatePanel">
+          <div class="panel-title">
+            <div>
+              <h3>תרגום ודיבור</h3>
+              <p>כתוב בעברית, תרגם לשפה הרצויה, ואז הצג למקומי רק את הטקסט המתורגם בגדול.</p>
+            </div>
+          </div>
+
+          <form id="translateForm" class="grid">
+            <div class="field"><label>טיול</label><select name="tripId" data-trip-select></select></div>
+            <div class="field"><label>שפת יעד</label>
+              <select name="targetLanguage" id="targetLanguage">
+                <option value="ka">גאורגית</option>
+                <option value="en">אנגלית</option>
+                <option value="ru">רוסית</option>
+                <option value="tr">טורקית</option>
+                <option value="ar">ערבית</option>
+                <option value="fr">צרפתית</option>
+                <option value="es">ספרדית</option>
+                <option value="it">איטלקית</option>
+                <option value="de">גרמנית</option>
+              </select>
+            </div>
+            <div class="field"><label>מצב</label>
+              <select name="context">
+                <option>מסעדה</option>
+                <option>מלון</option>
+                <option>מונית</option>
+                <option>שדה תעופה</option>
+                <option>קניות</option>
+                <option>רופא</option>
+                <option>חירום</option>
+                <option>אחר</option>
+              </select>
+            </div>
+            <div class="field full"><label>הטקסט שלך בעברית</label><textarea name="text" id="sourceText" placeholder="לדוגמה: אני לא אוכל בצל, אפשר להכין בלי בצל?"></textarea></div>
+            <div class="field"><label><input type="checkbox" name="savePhrase" checked> שמור משפט למאגר</label></div>
+            <div class="field"><label><input type="checkbox" name="isFavorite"> מועדף</label></div>
+            <div class="button-row field full">
+              <button class="btn primary" type="submit">תרגם</button>
+              <button class="btn good" type="button" id="speakBtn">השמע</button>
+              <button class="btn warn" type="button" id="localViewBtn">הצג למקומי</button>
+            </div>
+          </form>
+
+          <div class="translated-box" id="translatedText">התרגום יופיע כאן</div>
+
+          <div class="conversation-box">
+            <strong>שיחה עם מקומי</strong>
+            <p>אחרי שהשמעת או הצגת את התרגום, לחץ על המיקרופון ותן למקומי לדבר. Travil תנסה להבין את הדיבור שלו ולתרגם לך לעברית.</p>
+            <div class="button-row">
+              <button class="btn primary" type="button" id="listenLocalBtn">🎙️ המקומי מדבר</button>
+              <button class="btn light" type="button" id="clearConversationBtn">נקה שיחה</button>
+            </div>
+            <div class="conversation-result">
+              <div class="speech-card">
+                <b>מה שהמקומי אמר</b>
+                <div id="localSpeechText">עדיין לא נקלט דיבור.</div>
+              </div>
+              <div class="speech-card">
+                <b>תרגום לעברית</b>
+                <div id="hebrewReplyText">התרגום לעברית יופיע כאן.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="flightsPanel">
+          <div class="panel-title">
+            <div>
+              <h3>טיסות</h3>
+              <p>שמור מספר טיסה ותאריכים, ובדוק סטטוס חי בכל רגע.</p>
+            </div>
+          </div>
+
+          <div class="saved-panel" id="savedFlightsPanel">
+            <h3>טיסות שמורות</h3>
+            <p>לחץ על טיסה כדי לטעון אותה לטופס ולבדוק סטטוס.</p>
+            <div class="cards" id="savedFlightsCards"></div>
+          </div>
+
+          <datalist id="airportSuggestions">
+            <option value="TLV">TLV - תל אביב (נתב"ג)</option>
+            <option value="BUS">BUS - בטומי</option>
+          </datalist>
+
+          <form id="flightForm" class="grid">
+            <div class="field"><label>טיול</label><select name="tripId" data-trip-select></select></div>
+            <div class="field"><label>מספר טיסה</label><input name="flightNumber" id="flightNumberInput" placeholder="LY315"></div>
+            <div class="field"><label>תאריך טיסה</label><input name="flightDate" id="flightDateInput" type="date"></div>
+            <div class="field"><label>מוצא</label><input name="fromAirport" id="fromAirportInput" list="airportSuggestions" value="TLV" placeholder="TLV"></div>
+            <div class="field"><label>יעד</label><input name="toAirport" id="toAirportInput" list="airportSuggestions" placeholder="BUS"></div>
+            <div class="field"><label>שעת המראה</label><input name="departureTime" type="time"></div>
+            <div class="field"><label>שעת נחיתה</label><input name="arrivalTime" type="time"></div>
+            <div class="field"><label>סטטוס</label><input name="status" placeholder="נשמר / בזמן / עיכוב"></div>
+            <div class="field full"><label>הערות</label><textarea name="notes" placeholder="טרמינל, שער, מזוודות, תזכורות"></textarea></div>
+            <div class="button-row field full">
+              <button class="btn primary" type="submit">שמור טיסה</button>
+              <button class="btn good" type="button" id="checkFlightStatusBtn">בדוק סטטוס טיסה חי</button>
+              <button class="btn light cancel-btn" type="button">ביטול</button>
+            </div>
+          </form>
+
+          <p class="muted" id="flightStatusMessage"></p>
+          <div id="flightStatusResult"></div>
+        </div>
+
+        <div class="panel" id="emergencyPanel">
+          <div class="panel-title">
+            <div>
+              <h3>מצב חירום</h3>
+              <p>מציג מיקום נוכחי, מקום לינה נוכחי ומשפט מוכן להצגה או השמעה.</p>
+            </div>
+          </div>
+
+          <div class="emergency-strip" id="emergencySummary">עדיין אין נתוני חירום. שמור מקום לינה ואיש קשר.</div>
+
+          <form id="emergencyForm" class="grid">
+            <div class="field"><label>טיול</label><select name="tripId" data-trip-select></select></div>
+            <div class="field"><label>איש קשר</label><input name="contactName"></div>
+            <div class="field"><label>טלפון איש קשר</label><input name="contactPhone"></div>
+            <div class="field"><label>מספר חירום מקומי</label><input name="localEmergencyNumber" placeholder="112"></div>
+            <div class="field"><label>ביטוח</label><input name="insurance"></div>
+            <div class="field"><label>מידע רפואי חשוב</label><input name="medicalNotes"></div>
+            <div class="field full"><label>דרכון / הערות</label><textarea name="passportNotes"></textarea></div>
+            <div class="field full"><label>עוד הערות</label><textarea name="notes"></textarea></div>
+            <div class="button-row field full">
+              <button class="btn danger" type="submit">שמור חירום</button>
+              <button class="btn light" type="button" id="whereAmIBtn">איפה אני עכשיו?</button>
+              <button class="btn warn" type="button" id="emergencyPhraseBtn">הצג משפט חירום</button>
+              <button class="btn light cancel-btn" type="button">ביטול</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel" id="memoryPanel">
+          <div class="panel-title">
+            <div>
+              <h3>זיכרון טיולים</h3>
+              <p>חפש עיר, מסעדה, מלון, טיסה או כל הערה ששמרת בעבר.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field full"><label>חיפוש</label><input id="memoryQuery" placeholder="לדוגמה: בטומי, פיצה, מלון, LY315"></div>
+          </div>
+          <div class="button-row"><button class="btn primary" id="memorySearchBtn">חפש במאגר</button></div>
+          <div class="cards" id="memoryResults"></div>
+        </div>
+
+        <div class="panel" id="dayPlanPanel">
+          <div class="panel-title">
+            <div>
+              <h3>✨ תכנון היום</h3>
+              <p>תן ל-Travil להכין לך מסלול ליום אחד בטיול, לפי סוג היום, תקציב והשעות שמתאימות לך.</p>
+            </div>
+          </div>
+
+          <form id="dayPlanForm" class="grid">
+            <div class="field"><label>עיר</label><input name="city" id="dayPlanCity" placeholder="לדוגמה: בטומי"></div>
+            <div class="field"><label>סוג היום</label>
+              <select name="dayType">
+                <option value="קניות">קניות</option>
+                <option value="טבע ונופים">טבע ונופים</option>
+                <option value="אוכל מקומי">אוכל מקומי</option>
+                <option value="תרבות">תרבות</option>
+                <option value="בילוי">בילוי</option>
+                <option value="יום רגוע">יום רגוע</option>
+                <option value="יום משולב">יום משולב</option>
+              </select>
+            </div>
+            <div class="field"><label>אמצעי תחבורה</label>
+              <select name="transport">
+                <option value="הליכה">הליכה</option>
+                <option value="רכב פרטי">רכב פרטי</option>
+                <option value="תחבורה ציבורית">תחבורה ציבורית</option>
+                <option value="מונית / אפליקציית הסעות">מונית / אפליקציית הסעות</option>
+              </select>
+            </div>
+            <div class="field"><label>תקציב</label><input name="budget" placeholder="לדוגמה: בינוני, עד 100$ ליום"></div>
+            <div class="field"><label>שעת התחלה</label><input name="startTime" type="time" value="09:00"></div>
+            <div class="field"><label>שעת סיום</label><input name="endTime" type="time" value="20:00"></div>
+            <div class="field full"><label>בקשות מיוחדות</label><textarea name="specialRequests" placeholder="לדוגמה: עם ילדים, מקומות מוצלים, בלי הליכות ארוכות"></textarea></div>
+            <div class="button-row field full"><button class="btn primary" type="button" id="planDayBtn">הכן לי מסלול</button></div>
+          </form>
+
+          <p class="muted" id="dayPlanStatus"></p>
+          <div id="dayPlanResults"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>© כל הזכויות שמורות לעמאר פאעור · All rights reserved to Amar Faour</p>
+    </footer>
+  </div>
+
+  <section class="local-view" id="localView" aria-label="הצג למקומי">
+    <div class="local-top">
+      <button class="btn light" id="closeLocalViewBtn">חזרה</button>
+      <button class="btn good" id="localSpeakBtn">השמע בקול</button>
+    </div>
+    <div class="local-text" id="localText">...</div>
+    <div></div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay hidden" id="nicknameModal">
+    <div class="modal-box">
+      <h3>תן כינוי למיקום</h3>
+      <p>לדוגמה: חניית הרכב, הבית שלי, בית הספר - אפשר להשאיר ריק</p>
+      <input type="text" id="nicknameInput" placeholder="כינוי למיקום">
+      <div class="button-row">
+        <button class="btn primary" type="button" id="nicknameOkBtn">אישור</button>
+        <button class="btn light" type="button" id="nicknameCancelBtn">ביטול</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal-box">
+      <h3 id="confirmModalTitle">אישור פעולה</h3>
+      <p id="confirmModalText"></p>
+      <div class="button-row">
+        <button class="btn danger" type="button" id="confirmModalOkBtn">מחק</button>
+        <button class="btn light" type="button" id="confirmModalCancelBtn">ביטול</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const isAppsScript = Boolean(window.google && google.script && google.script.run);
+    const state = {
+      dashboard: {
+        trips: [],
+        stays: [],
+        locations: [],
+        places: [],
+        feedback: [],
+        flights: [],
+        phrases: [],
+        emergency: [],
+        spreadsheetUrl: ''
+      },
+      translatedText: '',
+      currentPosition: null
+    };
+
+    const demoTranslations = {
+      en: 'Hello, I need help please.',
+      ka: 'გამარჯობა, გთხოვთ დამეხმარეთ.',
+      ru: 'Здравствуйте, пожалуйста, помогите мне.',
+      tr: 'Merhaba, lütfen bana yardım eder misiniz?',
+      ar: 'مرحبا، أحتاج إلى مساعدة من فضلك.',
+      fr: 'Bonjour, j’ai besoin d’aide s’il vous plaît.',
+      es: 'Hola, necesito ayuda por favor.',
+      it: 'Ciao, ho bisogno di aiuto per favore.',
+      de: 'Hallo, ich brauche bitte Hilfe.'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      bindNavigation();
+      bindForms();
+      bindActions();
+      loadDashboard();
+
+      try {
+        initDayPlanFeature();
+      } catch (err) {
+        console.error('Day plan feature failed to initialize', err);
+      }
+
+      try {
+        initFlightStatusFeature();
+      } catch (err) {
+        console.error('Flight status feature failed to initialize', err);
+      }
+
+      try {
+        bindCancelButtons();
+      } catch (err) {
+        console.error('Cancel buttons failed to initialize', err);
+      }
+    });
+
+    function bindNavigation() {
+      document.querySelectorAll('[data-open]').forEach(button => {
+        button.addEventListener('click', () => openPanel(button.dataset.open));
+      });
+    }
+
+    function openPanel(panelId) {
+      document.querySelectorAll('.panel').forEach(panel => panel.classList.toggle('active', panel.id === panelId));
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.open === panelId));
+
+      const savedPanel = document.getElementById('dashboardSavedPanel');
+      if (savedPanel) {
+        savedPanel.classList.add('hidden');
+      }
+      state.activeDashboardList = null;
+
+      const targetPanel = document.getElementById(panelId);
+      if (targetPanel) {
+        targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function bindForms() {
+      document.getElementById('tripForm').addEventListener('submit', event => saveForm(event, 'saveTrip'));
+      document.getElementById('stayForm').addEventListener('submit', event => saveForm(event, 'saveStay'));
+      document.getElementById('flightForm').addEventListener('submit', event => saveForm(event, 'saveFlight'));
+      document.getElementById('emergencyForm').addEventListener('submit', event => saveForm(event, 'saveEmergencyInfo'));
+      document.getElementById('placeForm').addEventListener('submit', savePlaceAndFeedback);
+      document.getElementById('translateForm').addEventListener('submit', translateCurrentText);
+    }
+
+    function bindActions() {
+      document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
+      document.getElementById('saveLocationTopBtn').addEventListener('click', saveCurrentLocation);
+      document.getElementById('saveLocationHomeBtn').addEventListener('click', saveCurrentLocation);
+      document.getElementById('mapSearchBtn').addEventListener('click', () => openDestination('search'));
+      document.getElementById('googleNavigateBtn').addEventListener('click', () => openDestination('google'));
+      document.getElementById('wazeNavigateBtn').addEventListener('click', () => openDestination('waze'));
+      document.getElementById('speakBtn').addEventListener('click', () => speak(state.translatedText));
+      document.getElementById('localSpeakBtn').addEventListener('click', () => speak(state.translatedText));
+      document.getElementById('localViewBtn').addEventListener('click', openLocalView);
+      document.getElementById('closeLocalViewBtn').addEventListener('click', closeLocalView);
+      document.getElementById('listenLocalBtn').addEventListener('click', listenToLocalSpeaker);
+      document.getElementById('clearConversationBtn').addEventListener('click', clearConversation);
+      document.getElementById('whereAmIBtn').addEventListener('click', locateUser);
+      document.getElementById('emergencyPhraseBtn').addEventListener('click', showEmergencyPhrase);
+      document.getElementById('memorySearchBtn').addEventListener('click', searchMemory);
+
+      document.querySelectorAll('[data-dashboard-list]').forEach(button => {
+        button.addEventListener('click', () => showDashboardList(button.dataset.dashboardList));
+        button.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            showDashboardList(button.dataset.dashboardList);
+          }
+        });
+      });
+
+      document.getElementById('dashboardSavedCards').addEventListener('click', event => {
+        const button = event.target.closest('[data-delete-type]');
+        if (button) {
+          deleteDashboardItem(button.dataset.deleteType, button.dataset.deleteId, button.dataset.deleteTitle);
+        }
+      });
+
+      document.querySelectorAll('[data-nearby]').forEach(button => {
+        button.addEventListener('click', () => openNearbySearch(button.dataset.nearby));
+      });
+    }
+
+    function saveForm(event, serverFunctionName) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const payload = formToObject(form);
+
+      callServer(serverFunctionName, payload)
+        .then(() => {
+          toast('נשמר בהצלחה');
+          form.reset();
+          loadDashboard();
+        })
+        .catch(showError);
+    }
+
+    function savePlaceAndFeedback(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const payload = formToObject(form);
+
+      callServer('savePlace', payload)
+        .then(placeResult => {
+          const feedbackPayload = {
+            tripId: payload.tripId,
+            placeId: placeResult.item ? placeResult.item.PlaceId : '',
+            placeName: payload.name,
+            placeType: payload.type,
+            country: payload.country,
+            city: payload.city,
+            rating: payload.rating,
+            wouldReturn: payload.wouldReturn,
+            recommendAgain: payload.recommended,
+            priceLevel: '',
+            withWho: '',
+            whatILiked: payload.notes,
+            whatIDisliked: '',
+            notes: payload.notes
+          };
+          return callServer('saveFeedback', feedbackPayload);
+        })
+        .then(() => {
+          toast('המקום והמשוב נשמרו');
+          form.reset();
+          loadDashboard();
+        })
+        .catch(showError);
+    }
+
+    function translateCurrentText(event) {
+      event.preventDefault();
+      const payload = formToObject(event.currentTarget);
+      payload.sourceLanguage = 'iw';
+
+      callServer('translateText', payload)
+        .then(result => {
+          state.translatedText = result.translatedText || '';
+          document.getElementById('translatedText').textContent = state.translatedText || 'לא התקבל תרגום';
+          toast('התרגום מוכן');
+          loadDashboard();
+        })
+        .catch(showError);
+    }
+
+    function loadDashboard() {
+      return callServer('getDashboard', {})
+        .then(data => {
+          state.dashboard = Object.assign(state.dashboard, data);
+          renderDashboard();
+          document.getElementById('connectionStatus').textContent = isAppsScript ? 'מחובר למאגר Google Sheet' : 'תצוגה מקומית לפני העלאה';
+        })
+        .catch(err => {
+          document.getElementById('connectionStatus').textContent = 'אין חיבור למאגר';
+          showError(err);
+        });
+    }
+
+    function renderDashboard() {
+      const trips = state.dashboard.trips || [];
+      const stays = state.dashboard.stays || [];
+      const locations = state.dashboard.locations || [];
+      const places = state.dashboard.places || [];
+      const feedback = state.dashboard.feedback || [];
+      const phrases = state.dashboard.phrases || [];
+
+      document.getElementById('tripCount').textContent = trips.length;
+      document.getElementById('stayCount').textContent = stays.length;
+      document.getElementById('placeCount').textContent = places.length + feedback.length;
+      document.getElementById('phraseCount').textContent = phrases.length;
+      document.getElementById('locationCount').textContent = locations.length;
+
+      renderTripSelects(trips);
+      renderEmergencySummary();
+      renderLastLocation();
+
+      try {
+        renderFlightCards();
+      } catch (err) {
+        console.error('renderFlightCards failed', err);
+      }
+    }
+
+    function renderTripSelects(trips) {
+      const options = trips.length
+        ? trips.map(trip => `<option value="${escapeHtml(trip.TripId)}">${escapeHtml(displayTrip(trip))}</option>`).join('')
+        : '<option value="">אין טיולים עדיין</option>';
+
+      document.querySelectorAll('[data-trip-select]').forEach(select => {
+        const selected = select.value;
+        select.innerHTML = options;
+        if (selected) select.value = selected;
+      });
+    }
+
+    function renderEmergencySummary() {
+      const currentStay = [...(state.dashboard.stays || [])].reverse().find(stay => stay.IsCurrent === 'YES') || {};
+      const emergency = [...(state.dashboard.emergency || [])].reverse()[0] || {};
+      const parts = [];
+
+      if (currentStay.Name || currentStay.Address) {
+        parts.push(`לינה נוכחית: ${currentStay.Name || ''} ${currentStay.Address || ''}`);
+      }
+      if (emergency.ContactName || emergency.ContactPhone) {
+        parts.push(`איש קשר: ${emergency.ContactName || ''} ${emergency.ContactPhone || ''}`);
+      }
+      if (emergency.LocalEmergencyNumber) {
+        parts.push(`מספר חירום מקומי: ${emergency.LocalEmergencyNumber}`);
+      }
+
+      document.getElementById('emergencySummary').textContent = parts.length ? parts.join(' | ') : 'עדיין אין נתוני חירום. שמור מקום לינה ואיש קשר.';
+    }
+
+    function renderLastLocation() {
+      const last = [...(state.dashboard.locations || [])].reverse()[0];
+      const element = document.getElementById('lastLocationText');
+      if (!last) {
+        element.textContent = 'עדיין לא נשמר מיקום. כשתלחץ, Travil תשמור קישור מפה וזמן במאגר.';
+        return;
+      }
+
+      const coords = [last.Latitude || last.latitude, last.Longitude || last.longitude].filter(Boolean).join(', ');
+      const name = last.Label || last.label || last.PlaceName || 'מיקום נוכחי';
+      const details = last.Address || coords;
+      element.textContent = `מיקום אחרון נשמר: ${name}${details ? ' · ' + details : ''}`;
+    }
+
+    function showDashboardList(type) {
+      state.activeDashboardList = type;
+      const panel = document.getElementById('dashboardSavedPanel');
+      const title = document.getElementById('dashboardSavedTitle');
+      const subtitle = document.getElementById('dashboardSavedSubtitle');
+      const cards = document.getElementById('dashboardSavedCards');
+
+      const config = {
+        trips: {
+          title: 'טיולים שמורים',
+          rows: state.dashboard.trips || [],
+          typeLabel: 'טיול',
+          deleteType: 'trip',
+          idField: 'TripId',
+          itemTitle: row => displayTrip(row),
+          itemBody: row => [row.StartDate, row.EndDate, row.Language, row.Notes].filter(Boolean).join(' | ')
+        },
+        stays: {
+          title: 'מקומות לינה שמורים',
+          rows: state.dashboard.stays || [],
+          typeLabel: 'לינה',
+          deleteType: 'stay',
+          idField: 'StayId',
+          itemTitle: row => row.Name || row.City || 'מקום לינה',
+          itemBody: row => [row.Country, row.City, row.Address, row.Phone, row.Room ? `חדר ${row.Room}` : '', row.IsCurrent === 'YES' ? 'לינה נוכחית' : '', row.MapUrl ? `קישור למפה: ${row.MapUrl}` : '', row.Notes].filter(Boolean).join(' | ')
+        },
+        places: {
+          title: 'מקומות ומשובים שמורים',
+          rows: [...(state.dashboard.places || []), ...(state.dashboard.feedback || [])],
+          typeLabel: 'מקום / משוב',
+          deleteType: row => row.FeedbackId ? 'feedback' : 'place',
+          idField: row => row.FeedbackId ? 'FeedbackId' : 'PlaceId',
+          itemTitle: row => row.Name || row.PlaceName || 'מקום',
+          itemBody: row => [row.Type || row.PlaceType, row.City, row.Rating ? `דירוג: ${row.Rating}` : '', row.Notes || row.WhatILiked].filter(Boolean).join(' | ')
+        },
+        phrases: {
+          title: 'משפטים שמורים',
+          rows: state.dashboard.phrases || [],
+          typeLabel: 'משפט',
+          deleteType: 'phrase',
+          idField: 'PhraseId',
+          itemTitle: row => row.TranslatedText || row.OriginalText || 'משפט שמור',
+          itemBody: row => [row.OriginalText, row.TargetLanguage, row.Context].filter(Boolean).join(' | ')
+        },
+        locations: {
+          title: 'מיקומים שמורים',
+          rows: state.dashboard.locations || [],
+          typeLabel: 'מיקום',
+          deleteType: 'location',
+          idField: 'LocationId',
+          itemTitle: row => row.Label || row.PlaceName || 'מיקום שמור',
+          itemBody: row => [row.Address, row.Latitude && row.Longitude ? `${row.Latitude}, ${row.Longitude}` : '', row.Accuracy ? `דיוק: ${row.Accuracy} מטר` : '', row.MapUrl, row.Notes].filter(Boolean).join(' | ')
+        }
+      };
+
+      const selected = config[type];
+      if (!selected) return;
+
+      panel.classList.remove('hidden');
+      title.textContent = selected.title;
+      subtitle.textContent = `${selected.rows.length} פריטים שמורים`;
+
+      if (!selected.rows.length) {
+        cards.innerHTML = '<div class="card"><strong>אין עדיין נתונים</strong><p>כשתשמור פריטים מסוג זה הם יופיעו כאן.</p></div>';
+        return;
+      }
+
+      cards.innerHTML = [...selected.rows].reverse().slice(0, 60).map(row => {
+        const itemTitle = selected.itemTitle(row);
+        const deleteType = typeof selected.deleteType === 'function' ? selected.deleteType(row) : selected.deleteType;
+        const idField = typeof selected.idField === 'function' ? selected.idField(row) : selected.idField;
+        const deleteId = row[idField] || '';
+        return `
+        <article class="card">
+          <span>${escapeHtml(selected.typeLabel)}</span>
+          <strong>${escapeHtml(itemTitle)}</strong>
+          <p>${escapeHtml(selected.itemBody(row))}</p>
+          <div class="card-actions">
+            <button class="delete-btn" type="button" data-delete-type="${escapeHtml(deleteType)}" data-delete-id="${escapeHtml(deleteId)}" data-delete-title="${escapeHtml(itemTitle)}">מחק</button>
+          </div>
+        </article>
+      `;
+      }).join('');
+    }
+
+    function deleteDashboardItem(type, id, title) {
+      if (!type || !id) {
+        toast('אין מזהה למחיקה');
+        return;
+      }
+
+      askForConfirmation(`למחוק את "${title || 'הפריט'}"?`).then(ok => {
+        if (!ok) return;
+
+        callServer('deleteSavedItem', { type, id })
+          .then(result => {
+            if (!result || result.ok === false) {
+              toast('המחיקה לא הצליחה');
+              return;
+            }
+            toast('הפריט נמחק');
+            return loadDashboard().then(() => {
+              if (state.activeDashboardList) {
+                showDashboardList(state.activeDashboardList);
+              }
+            });
+          })
+          .catch(showError);
+      });
+    }
+
+    function searchMemory() {
+      const query = document.getElementById('memoryQuery').value.trim();
+      if (!query) {
+        toast('כתוב משהו לחיפוש');
+        return;
+      }
+
+      callServer('searchMemory', query)
+        .then(result => renderMemoryResults(result.results || []))
+        .catch(showError);
+    }
+
+    function renderMemoryResults(results) {
+      const container = document.getElementById('memoryResults');
+      if (!results.length) {
+        container.innerHTML = '<div class="card"><strong>לא נמצאו תוצאות</strong><p>נסה שם עיר, מקום, מסעדה או מספר טיסה.</p></div>';
+        return;
+      }
+
+      container.innerHTML = results.slice(0, 12).map(result => {
+        const row = result.row || {};
+        const title = row.Name || row.PlaceName || row.City || row.FlightNumber || row.TranslatedText || row.TripId || 'תוצאה';
+        const body = row.Notes || row.Address || row.Country || row.OriginalText || row.Status || '';
+        return `<article class="card"><span>${escapeHtml(result.type)}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(body)}</p></article>`;
+      }).join('');
+    }
+
+    function openDestination(mode) {
+      const input = document.getElementById('destinationInput');
+      const destination = input.value.trim();
+      if (!destination) {
+        toast('כתוב יעד לניווט');
+        input.focus();
+        return;
+      }
+
+      const savedLocation = findSavedLocationByNickname(destination);
+      let resolvedDestination = destination;
+
+      if (savedLocation) {
+        const latitude = savedLocation.Latitude || savedLocation.latitude || '';
+        const longitude = savedLocation.Longitude || savedLocation.longitude || '';
+        const coordinates = latitude !== '' && longitude !== '' ? `${latitude},${longitude}` : '';
+        resolvedDestination = coordinates || savedLocation.Address || savedLocation.PlaceName || destination;
+        toast(`נמצא מיקום שמור: ${savedLocation.Label || savedLocation.PlaceName || destination}`);
+      }
+
+      const encoded = encodeURIComponent(resolvedDestination);
+      const urls = {
+        search: `https://www.google.com/maps/search/?api=1&query=${encoded}`,
+        google: `https://www.google.com/maps/dir/?api=1&destination=${encoded}&travelmode=driving`,
+        waze: `https://waze.com/ul?q=${encoded}&navigate=yes`
+      };
+
+      window.open(urls[mode], '_blank');
+    }
+
+    function findSavedLocationByNickname(query) {
+      const normalizedQuery = normalizeLocationNickname(query);
+      if (!normalizedQuery) return null;
+
+      const locations = [...(state.dashboard.locations || [])].reverse();
+      return locations.find(location => {
+        const label = location.Label || location.label || '';
+        const aliases = String(label)
+          .split(/[\/|;,]+/)
+          .map(normalizeLocationNickname)
+          .filter(Boolean);
+        return normalizeLocationNickname(label) === normalizedQuery || aliases.includes(normalizedQuery);
+      }) || null;
+    }
+
+    function normalizeLocationNickname(value) {
+      return String(value || '').trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function openNearbySearch(type) {
+      if (!navigator.geolocation) {
+        toast('המכשיר לא תומך במיקום');
+        return;
+      }
+
+      toast('מאתר את המיקום הנוכחי שלך...');
+      navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        toast('מחפש סביבך');
+        window.open(`https://www.google.com/maps/search/${encodeURIComponent(type)}/@${lat},${lng},15z`, '_blank');
+      }, () => toast('לא התקבלה הרשאת מיקום'));
+    }
+
+    function getLastSavedLocation() {
+      const locations = [...(state.dashboard.locations || [])].reverse();
+      return locations.find(location => {
+        const lat = location.Latitude || location.latitude;
+        const lng = location.Longitude || location.longitude;
+        return lat && lng;
+      }) || null;
+    }
+
+    function locateUser() {
+      if (!navigator.geolocation) {
+        toast('המכשיר לא תומך במיקום');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        state.currentPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        toast('המיקום זוהה');
+        window.open(`https://www.google.com/maps?q=${state.currentPosition.lat},${state.currentPosition.lng}`, '_blank');
+      }, () => toast('לא התקבלה הרשאת מיקום'));
+    }
+
+    function askForConfirmation(message) {
+      return new Promise(resolve => {
+        const modal = document.getElementById('confirmModal');
+        const text = document.getElementById('confirmModalText');
+        const okBtn = document.getElementById('confirmModalOkBtn');
+        const cancelBtn = document.getElementById('confirmModalCancelBtn');
+
+        if (!modal || !text || !okBtn || !cancelBtn) {
+          resolve(false);
+          return;
+        }
+
+        text.textContent = message || 'למחוק את הפריט?';
+        modal.classList.remove('hidden');
+
+        const cleanup = () => {
+          modal.classList.add('hidden');
+          okBtn.removeEventListener('click', onOk);
+          cancelBtn.removeEventListener('click', onCancel);
+        };
+
+        const onOk = () => {
+          cleanup();
+          resolve(true);
+        };
+
+        const onCancel = () => {
+          cleanup();
+          resolve(false);
+        };
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+      });
+    }
+
+    function askForNickname() {
+      return new Promise(resolve => {
+        const modal = document.getElementById('nicknameModal');
+        const input = document.getElementById('nicknameInput');
+        const okBtn = document.getElementById('nicknameOkBtn');
+        const cancelBtn = document.getElementById('nicknameCancelBtn');
+
+        if (!modal || !input || !okBtn || !cancelBtn) {
+          resolve(null);
+          return;
+        }
+
+        input.value = '';
+        modal.classList.remove('hidden');
+        input.focus();
+
+        const cleanup = () => {
+          modal.classList.add('hidden');
+          okBtn.removeEventListener('click', onOk);
+          cancelBtn.removeEventListener('click', onCancel);
+          input.removeEventListener('keydown', onKeydown);
+        };
+
+        const onOk = () => {
+          const value = input.value;
+          cleanup();
+          resolve(value);
+        };
+
+        const onCancel = () => {
+          cleanup();
+          resolve(null);
+        };
+
+        const onKeydown = event => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            onOk();
+          } else if (event.key === 'Escape') {
+            onCancel();
+          }
+        };
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+        input.addEventListener('keydown', onKeydown);
+      });
+    }
+
+    function saveCurrentLocation() {
+      if (!navigator.geolocation) {
+        toast('המכשיר לא תומך בשמירת מיקום');
+        return;
+      }
+
+      askForNickname().then(nickname => {
+        if (nickname === null) {
+          return;
+        }
+
+        toast('מבקש הרשאת מיקום...');
+        navigator.geolocation.getCurrentPosition(position => {
+          const payload = {
+            tripId: getActiveTripId(),
+            label: nickname.trim() || 'המיקום הנוכחי שלי',
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: Math.round(position.coords.accuracy || 0),
+            notes: 'נשמר מהמסך הראשי'
+          };
+
+          callServer('saveCurrentLocation', payload)
+            .then(() => {
+              state.currentPosition = {
+                lat: payload.latitude,
+                lng: payload.longitude
+              };
+              toast('המיקום נשמר במאגר');
+              loadDashboard();
+            })
+            .catch(showError);
+        }, () => toast('לא התקבלה הרשאת מיקום'));
+      });
+    }
+
+    function showEmergencyPhrase() {
+      const currentStay = [...(state.dashboard.stays || [])].reverse().find(stay => stay.IsCurrent === 'YES') || {};
+      const phrase = [
+        'I need help. I am a tourist and I do not speak the local language.',
+        currentStay.Address ? `I am staying at: ${currentStay.Name || ''}, ${currentStay.Address}.` : '',
+        state.currentPosition ? `My current location is: ${state.currentPosition.lat}, ${state.currentPosition.lng}.` : ''
+      ].filter(Boolean).join(' ');
+
+      state.translatedText = phrase;
+      document.getElementById('localText').textContent = phrase;
+      document.getElementById('localView').classList.add('open');
+    }
+
+    function openLocalView() {
+      const text = state.translatedText || document.getElementById('translatedText').textContent;
+      if (!text || text === 'התרגום יופיע כאן') {
+        toast('קודם צריך לתרגם טקסט');
+        return;
+      }
+      document.getElementById('localText').textContent = text;
+      document.getElementById('localView').classList.add('open');
+    }
+
+    function closeLocalView() {
+      document.getElementById('localView').classList.remove('open');
+    }
+
+    function listenToLocalSpeaker() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        toast('הדפדפן לא תומך בזיהוי דיבור');
+        return;
+      }
+
+      const targetLanguage = document.getElementById('targetLanguage').value || 'en';
+      const recognition = new SpeechRecognition();
+      recognition.lang = languageCodeForSpeech(targetLanguage);
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      document.getElementById('localSpeechText').textContent = 'מקשיב...';
+      document.getElementById('hebrewReplyText').textContent = 'ממתין לדיבור של המקומי.';
+      toast('המיקרופון פתוח, תן למקומי לדבר');
+
+      recognition.onresult = event => {
+        const spokenText = event.results && event.results[0] && event.results[0][0]
+          ? event.results[0][0].transcript
+          : '';
+
+        if (!spokenText) {
+          toast('לא נקלט דיבור ברור');
+          document.getElementById('localSpeechText').textContent = 'לא נקלט דיבור ברור.';
+          return;
+        }
+
+        document.getElementById('localSpeechText').textContent = spokenText;
+        translateLocalReply(spokenText, targetLanguage);
+      };
+
+      recognition.onerror = () => {
+        document.getElementById('localSpeechText').textContent = 'לא הצלחתי להאזין. בדוק הרשאת מיקרופון ונסה שוב.';
+        toast('לא הצלחתי להאזין');
+      };
+
+      recognition.onend = () => {
+        const current = document.getElementById('localSpeechText').textContent;
+        if (current === 'מקשיב...') {
+          document.getElementById('localSpeechText').textContent = 'ההאזנה הסתיימה בלי טקסט.';
+        }
+      };
+
+      recognition.start();
+    }
+
+    function translateLocalReply(spokenText, sourceLanguage) {
+      const payload = {
+        tripId: getActiveTripId(),
+        text: spokenText,
+        sourceLanguage,
+        targetLanguage: 'iw',
+        context: 'שיחה עם מקומי',
+        savePhrase: true,
+        isFavorite: false
+      };
+
+      document.getElementById('hebrewReplyText').textContent = 'מתרגם לעברית...';
+      callServer('translateText', payload)
+        .then(result => {
+          document.getElementById('hebrewReplyText').textContent = result.translatedText || 'לא התקבל תרגום.';
+          toast('התגובה תורגמה לעברית');
+          loadDashboard();
+        })
+        .catch(showError);
+    }
+
+    function clearConversation() {
+      document.getElementById('localSpeechText').textContent = 'עדיין לא נקלט דיבור.';
+      document.getElementById('hebrewReplyText').textContent = 'התרגום לעברית יופיע כאן.';
+    }
+
+    function speak(text) {
+      const phrase = String(text || '').trim();
+      if (!phrase) {
+        toast('אין טקסט להשמעה');
+        return;
+      }
+
+      if (!window.speechSynthesis) {
+        toast('הדפדפן לא תומך בהקראה');
+        return;
+      }
+
+      const language = document.getElementById('targetLanguage') ? document.getElementById('targetLanguage').value : 'en';
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(phrase);
+      utterance.lang = languageCodeForSpeech(language);
+      utterance.rate = .9;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function languageCodeForSpeech(code) {
+      const map = {
+        iw: 'he-IL',
+        he: 'he-IL',
+        en: 'en-US',
+        ka: 'ka-GE',
+        ru: 'ru-RU',
+        tr: 'tr-TR',
+        ar: 'ar',
+        fr: 'fr-FR',
+        es: 'es-ES',
+        it: 'it-IT',
+        de: 'de-DE'
+      };
+      return map[code] || code;
+    }
+
+    function formToObject(form) {
+      const data = new FormData(form);
+      const payload = {};
+      data.forEach((value, key) => {
+        payload[key] = value;
+      });
+      form.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        payload[input.name] = input.checked;
+      });
+      return payload;
+    }
+
+    function callServer(functionName, payload) {
+      if (!isAppsScript) {
+        return mockServer(functionName, payload);
+      }
+
+      return new Promise((resolve, reject) => {
+        google.script.run
+          .withSuccessHandler(resolve)
+          .withFailureHandler(reject)[functionName](payload);
+      });
+    }
+
+    function mockServer(functionName, payload) {
+      const local = JSON.parse(localStorage.getItem('travil-demo') || '{}');
+      local.trips = local.trips || [];
+      local.stays = local.stays || [];
+      local.locations = local.locations || [];
+      local.places = local.places || [];
+      local.feedback = local.feedback || [];
+      local.flights = local.flights || [];
+      local.phrases = local.phrases || [];
+      local.emergency = local.emergency || [];
+
+      const save = () => localStorage.setItem('travil-demo', JSON.stringify(local));
+      const id = prefix => `${prefix}-${Math.random().toString(16).slice(2, 8).toUpperCase()}`;
+
+      if (functionName === 'getDashboard') {
+        return Promise.resolve(Object.assign({ ok: true, spreadsheetUrl: '' }, local));
+      }
+
+      if (functionName === 'planDay') {
+        return Promise.resolve({
+          ok: true,
+          itinerary: [
+            {
+              time: '09:00',
+              name: 'דוגמת עצירה (מצב תצוגה מקומית)',
+              type: payload && payload.dayType ? payload.dayType : '',
+              description: 'זו תצוגת דמו מקומית בלי חיבור ל-Apps Script. בפריסה האמיתית התשובה תגיע מ-Gemini.',
+              area: payload && payload.city ? payload.city : '',
+              durationMinutes: 60,
+              estimatedCost: 'לא ידוע',
+              transportTip: payload && payload.transport ? payload.transport : ''
+            }
+          ]
+        });
+      }
+
+      if (functionName === 'getFlightStatus') {
+        return Promise.resolve({
+          ok: true,
+          status: 'Expected',
+          airline: 'דוגמה (מצב תצוגה מקומית)',
+          flightNumber: payload && payload.flightNumber ? payload.flightNumber : '',
+          departure: { airport: 'TLV', scheduled: '', terminal: '3', gate: '', actual: '', estimated: '', delayMinutes: '' },
+          arrival: { airport: '', scheduled: '', terminal: '', gate: '', actual: '', estimated: '', delayMinutes: '' }
+        });
+      }
+
+      if (functionName === 'searchMemory') {
+        const text = String(payload || '').toLowerCase();
+        const results = [];
+        ['trips', 'stays', 'locations', 'places', 'feedback', 'flights', 'phrases'].forEach(type => {
+          local[type].forEach(row => {
+            if (Object.values(row).join(' ').toLowerCase().includes(text)) {
+              results.push({ type, row });
+            }
+          });
+        });
+        return Promise.resolve({ ok: true, results });
+      }
+
+      if (functionName === 'deleteSavedItem') {
+        const deleteMap = {
+          trip: ['trips', 'TripId'],
+          stay: ['stays', 'StayId'],
+          location: ['locations', 'LocationId'],
+          place: ['places', 'PlaceId'],
+          feedback: ['feedback', 'FeedbackId'],
+          phrase: ['phrases', 'PhraseId'],
+          flight: ['flights', 'FlightId'],
+          emergency: ['emergency', 'EmergencyId']
+        };
+        const target = deleteMap[payload.type];
+        if (!target) return Promise.resolve({ ok: false });
+
+        const [collection, idField] = target;
+        const before = local[collection].length;
+        local[collection] = local[collection].filter(row => String(row[idField]) !== String(payload.id));
+
+        if (payload.type === 'trip') {
+          ['stays', 'locations', 'places', 'feedback', 'flights', 'phrases', 'emergency'].forEach(collectionName => {
+            local[collectionName] = local[collectionName].filter(row => String(row.TripId) !== String(payload.id));
+          });
+        }
+
+        save();
+        return Promise.resolve({ ok: local[collection].length < before });
+      }
+
+      if (functionName === 'translateText') {
+        const translatedText = payload.targetLanguage === 'iw'
+          ? 'תרגום דוגמה לעברית: הבנתי, אני אעזור לך.'
+          : demoTranslations[payload.targetLanguage] || demoTranslations.en;
+        if (payload.savePhrase) {
+          local.phrases.push({
+            PhraseId: id('PHR'),
+            TripId: payload.tripId || '',
+            CreatedAt: new Date().toLocaleString(),
+            OriginalText: payload.text,
+            TranslatedText: translatedText,
+            TargetLanguage: payload.targetLanguage,
+            Context: payload.context,
+            IsFavorite: payload.isFavorite ? 'YES' : 'NO'
+          });
+          save();
+        }
+        return Promise.resolve({ ok: true, translatedText });
+      }
+
+      const map = {
+        saveTrip: ['trips', 'TripId', 'TRIP'],
+        saveStay: ['stays', 'StayId', 'STAY'],
+        savePlace: ['places', 'PlaceId', 'PLACE'],
+        saveFeedback: ['feedback', 'FeedbackId', 'FDBK'],
+        saveFlight: ['flights', 'FlightId', 'FLT'],
+        saveEmergencyInfo: ['emergency', 'EmergencyId', 'EMG'],
+        saveCurrentLocation: ['locations', 'LocationId', 'LOC']
+      };
+
+      if (map[functionName]) {
+        const [collection, idField, prefix] = map[functionName];
+        const item = Object.assign({}, payload);
+        item[idField] = item[idField] || id(prefix);
+        item.CreatedAt = item.CreatedAt || new Date().toLocaleString();
+        item.UpdatedAt = item.UpdatedAt || new Date().toLocaleString();
+        if (collection === 'stays') item.IsCurrent = payload.isCurrent ? 'YES' : 'NO';
+        if (collection === 'locations') {
+          item.Label = payload.label || 'Current location';
+          item.PlaceName = payload.label || 'Current location';
+          item.Address = '';
+          item.Latitude = payload.latitude || '';
+          item.Longitude = payload.longitude || '';
+          item.Accuracy = payload.accuracy || '';
+          item.MapUrl = payload.latitude && payload.longitude ? `https://www.google.com/maps?q=${payload.latitude},${payload.longitude}` : '';
+        }
+        local[collection].push(item);
+        save();
+        return Promise.resolve({ ok: true, item });
+      }
+
+      return Promise.resolve({ ok: true });
+    }
+
+    function displayTrip(trip) {
+      return [trip.Country || trip.country, trip.City || trip.city].filter(Boolean).join(' · ') || trip.TripId || 'טיול';
+    }
+
+    function getActiveTripId() {
+      const selected = document.querySelector('[data-trip-select]');
+      if (selected && selected.value) return selected.value;
+      const lastTrip = [...(state.dashboard.trips || [])].reverse()[0];
+      return lastTrip ? lastTrip.TripId : '';
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function toast(message) {
+      const element = document.getElementById('toast');
+      element.textContent = message;
+      element.classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => element.classList.remove('show'), 2600);
+    }
+
+    function showError(error) {
+      const message = error && error.message ? error.message : String(error || 'שגיאה לא ידועה');
+      toast(message);
+    }
+
+    function initDayPlanFeature() {
+      const planButton = document.getElementById('planDayBtn');
+      if (!planButton) {
+        return;
+      }
+
+      prefillDayPlanCity();
+      planButton.addEventListener('click', requestDayPlan);
+    }
+
+    function prefillDayPlanCity() {
+      const cityInput = document.getElementById('dayPlanCity');
+      if (!cityInput || cityInput.value) {
+        return;
+      }
+
+      const trips = state.dashboard.trips || [];
+      const lastTrip = trips[trips.length - 1];
+      const lastCity = lastTrip ? (lastTrip.City || lastTrip.city) : '';
+      if (lastCity) {
+        cityInput.value = lastCity;
+      }
+    }
+
+    function requestDayPlan() {
+      const form = document.getElementById('dayPlanForm');
+      const statusBox = document.getElementById('dayPlanStatus');
+      const resultsBox = document.getElementById('dayPlanResults');
+      if (!form || !statusBox || !resultsBox) {
+        return;
+      }
+
+      const payload = formToObject(form);
+      resultsBox.innerHTML = '';
+      statusBox.textContent = 'מאתר מיקום נוכחי...';
+
+      const finishWithPosition = (latitude, longitude) => {
+        payload.latitude = latitude || '';
+        payload.longitude = longitude || '';
+        statusBox.textContent = 'מכין מסלול ליום שלך, רגע בבקשה...';
+
+        callServer('planDay', payload)
+          .then(result => {
+            if (!result || result.ok === false) {
+              statusBox.textContent = (result && result.error) || 'לא הצלחתי להכין מסלול. נסה שוב.';
+              return;
+            }
+
+            statusBox.textContent = '';
+            renderDayPlan(result.itinerary || [], payload.city);
+          })
+          .catch(err => {
+            statusBox.textContent = 'שגיאה בהכנת המסלול. נסה שוב.';
+            showError(err);
+          });
+      };
+
+      try {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            position => finishWithPosition(position.coords.latitude, position.coords.longitude),
+            () => finishWithPosition('', ''),
+            { timeout: 6000 }
+          );
+        } else {
+          finishWithPosition('', '');
+        }
+      } catch (err) {
+        finishWithPosition('', '');
+      }
+    }
+
+    function renderDayPlan(stops, city) {
+      const resultsBox = document.getElementById('dayPlanResults');
+      if (!resultsBox) {
+        return;
+      }
+
+      resultsBox.innerHTML = '';
+
+      if (!stops || !stops.length) {
+        const empty = document.createElement('div');
+        empty.className = 'card';
+        empty.textContent = 'לא התקבל מסלול. נסה לשנות את הבקשה ולנסות שוב.';
+        resultsBox.appendChild(empty);
+        return;
+      }
+
+      const list = document.createElement('div');
+      list.className = 'cards';
+
+      stops.forEach(stop => {
+        list.appendChild(buildDayPlanStopCard(stop, city));
+      });
+
+      resultsBox.appendChild(list);
+      resultsBox.appendChild(buildFullRouteButtonRow(stops, city));
+    }
+
+    function buildDayPlanStopCard(stop, city) {
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      const timeLine = document.createElement('span');
+      timeLine.textContent = stop.time || '';
+      card.appendChild(timeLine);
+
+      const title = document.createElement('strong');
+      title.textContent = stop.name || 'עצירה';
+      card.appendChild(title);
+
+      const meta = document.createElement('p');
+      meta.textContent = [stop.type, stop.area].filter(Boolean).join(' · ');
+      card.appendChild(meta);
+
+      const desc = document.createElement('p');
+      desc.textContent = stop.description || '';
+      card.appendChild(desc);
+
+      const details = document.createElement('p');
+      const detailParts = [];
+      if (stop.durationMinutes) detailParts.push('משך: ' + stop.durationMinutes + ' דק');
+      if (stop.estimatedCost) detailParts.push('עלות: ' + stop.estimatedCost);
+      if (stop.transportTip) detailParts.push('תחבורה: ' + stop.transportTip);
+      details.textContent = detailParts.join(' | ');
+      card.appendChild(details);
+
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+
+      const query = [stop.name, stop.area, city].filter(Boolean).join(' ');
+
+      const googleBtn = document.createElement('button');
+      googleBtn.type = 'button';
+      googleBtn.className = 'btn primary';
+      googleBtn.textContent = 'Google Maps';
+      googleBtn.addEventListener('click', () => {
+        navigateFromCurrentLocation(query, 'google');
+      });
+      actions.appendChild(googleBtn);
+
+      const wazeBtn = document.createElement('button');
+      wazeBtn.type = 'button';
+      wazeBtn.className = 'btn good';
+      wazeBtn.textContent = 'Waze';
+      wazeBtn.addEventListener('click', () => {
+        navigateFromCurrentLocation(query, 'waze');
+      });
+      actions.appendChild(wazeBtn);
+
+      card.appendChild(actions);
+      return card;
+    }
+
+    function navigateFromCurrentLocation(destinationQuery, mode) {
+      if (!destinationQuery) {
+        toast('אין מקום לנווט אליו');
+        return;
+      }
+
+      const openWithOrigin = (originParam) => {
+        const encodedDestination = encodeURIComponent(destinationQuery);
+        let url;
+        if (mode === 'waze') {
+          url = 'https://waze.com/ul?q=' + encodedDestination + '&navigate=yes';
+        } else {
+          url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodedDestination + '&travelmode=driving';
+          if (originParam) {
+            url += '&origin=' + originParam;
+          }
+        }
+        window.open(url, '_blank');
+      };
+
+      if (!navigator.geolocation) {
+        openWithOrigin('');
+        return;
+      }
+
+      toast('מאתר את המיקום הנוכחי שלך...');
+      navigator.geolocation.getCurrentPosition(
+        position => openWithOrigin(position.coords.latitude + ',' + position.coords.longitude),
+        () => openWithOrigin(''),
+        { timeout: 6000 }
+      );
+    }
+
+    function buildFullRouteButtonRow(stops, city) {
+      const row = document.createElement('div');
+      row.className = 'button-row';
+
+      const fullRouteBtn = document.createElement('button');
+      fullRouteBtn.type = 'button';
+      fullRouteBtn.className = 'btn warn';
+      fullRouteBtn.textContent = 'פתח את כל המסלול בגוגל מפות';
+      fullRouteBtn.addEventListener('click', () => {
+        openFullDayRoute(stops, city);
+      });
+
+      row.appendChild(fullRouteBtn);
+      return row;
+    }
+
+    function openFullDayRoute(stops, city) {
+      if (!stops || !stops.length) {
+        return;
+      }
+
+      const points = stops.map(stop => [stop.name, stop.area, city].filter(Boolean).join(' '));
+      const destination = encodeURIComponent(points[points.length - 1]);
+      const waypoints = points.slice(0, -1).map(point => encodeURIComponent(point)).join('|');
+
+      let url = 'https://www.google.com/maps/dir/?api=1&destination=' + destination + '&travelmode=driving';
+      if (waypoints) {
+        url += '&waypoints=' + waypoints;
+      }
+
+      window.open(url, '_blank');
+    }
+
+    function bindCancelButtons() {
+      document.querySelectorAll('.cancel-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const form = button.closest('form');
+          if (form) {
+            form.reset();
+          }
+          openPanel('homePanel');
+        });
+      });
+    }
+
+    function initFlightStatusFeature() {
+      const checkBtn = document.getElementById('checkFlightStatusBtn');
+      if (!checkBtn) {
+        return;
+      }
+
+      checkBtn.addEventListener('click', checkFlightStatus);
+
+      const savedFlightsCards = document.getElementById('savedFlightsCards');
+      if (savedFlightsCards) {
+        savedFlightsCards.addEventListener('click', event => {
+          const deleteBtn = event.target.closest('[data-delete-flight-id]');
+          if (deleteBtn) {
+            deleteSavedFlight(deleteBtn.dataset.deleteFlightId, deleteBtn.dataset.deleteFlightTitle);
+            return;
+          }
+
+          const card = event.target.closest('[data-flight-id]');
+          if (card) {
+            fillFlightForm(card.dataset.flightId);
+          }
+        });
+      }
+    }
+
+    function renderFlightCards() {
+      const container = document.getElementById('savedFlightsCards');
+      if (!container) {
+        return;
+      }
+
+      const flights = state.dashboard.flights || [];
+      container.innerHTML = '';
+
+      if (!flights.length) {
+        const empty = document.createElement('div');
+        empty.className = 'card';
+        empty.innerHTML = '';
+        const strongEl = document.createElement('strong');
+        strongEl.textContent = 'אין עדיין טיסות שמורות';
+        const pEl = document.createElement('p');
+        pEl.textContent = 'שמור טיסה בטופס מתחת כדי שתופיע כאן.';
+        empty.appendChild(strongEl);
+        empty.appendChild(pEl);
+        container.appendChild(empty);
+        return;
+      }
+
+      [...flights].reverse().slice(0, 30).forEach(flight => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.style.cursor = 'pointer';
+        card.dataset.flightId = flight.FlightId || '';
+
+        const title = document.createElement('strong');
+        title.textContent = flight.FlightNumber || 'טיסה';
+        card.appendChild(title);
+
+        const route = document.createElement('p');
+        route.textContent = [flight.FromAirport, flight.ToAirport].filter(Boolean).join(' ← ');
+        card.appendChild(route);
+
+        const meta = document.createElement('p');
+        meta.textContent = [flight.FlightDate, flight.Status].filter(Boolean).join(' | ');
+        card.appendChild(meta);
+
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'מחק';
+        deleteBtn.dataset.deleteFlightId = flight.FlightId || '';
+        deleteBtn.dataset.deleteFlightTitle = flight.FlightNumber || 'הטיסה';
+        actions.appendChild(deleteBtn);
+
+        card.appendChild(actions);
+        container.appendChild(card);
+      });
+    }
+
+    function deleteSavedFlight(flightId, title) {
+      if (!flightId) {
+        toast('אין מזהה למחיקה');
+        return;
+      }
+
+      askForConfirmation('למחוק את הטיסה "' + (title || '') + '"?').then(ok => {
+        if (!ok) {
+          return;
+        }
+
+        callServer('deleteSavedItem', { type: 'flight', id: flightId })
+          .then(result => {
+            if (!result || result.ok === false) {
+              toast('המחיקה לא הצליחה');
+              return;
+            }
+            toast('הטיסה נמחקה');
+            loadDashboard();
+          })
+          .catch(showError);
+      });
+    }
+
+    function fillFlightForm(flightId) {
+      const flight = (state.dashboard.flights || []).find(row => row.FlightId === flightId);
+      if (!flight) {
+        return;
+      }
+
+      const form = document.getElementById('flightForm');
+      if (!form) {
+        return;
+      }
+
+      const setValue = (name, value) => {
+        const field = form.elements[name];
+        if (field) {
+          field.value = value || '';
+        }
+      };
+
+      setValue('tripId', flight.TripId);
+      setValue('flightNumber', flight.FlightNumber);
+      setValue('flightDate', flight.FlightDate);
+      setValue('fromAirport', flight.FromAirport);
+      setValue('toAirport', flight.ToAirport);
+      setValue('departureTime', flight.DepartureTime);
+      setValue('arrivalTime', flight.ArrivalTime);
+      setValue('status', flight.Status);
+      setValue('notes', flight.Notes);
+
+      const panel = document.getElementById('flightsPanel');
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      toast('פרטי הטיסה נטענו לטופס');
+    }
+
+    function checkFlightStatus() {
+      const flightNumberInput = document.getElementById('flightNumberInput');
+      const flightDateInput = document.getElementById('flightDateInput');
+      const messageBox = document.getElementById('flightStatusMessage');
+      const resultBox = document.getElementById('flightStatusResult');
+
+      if (!flightNumberInput || !messageBox || !resultBox) {
+        return;
+      }
+
+      const flightNumber = flightNumberInput.value.trim();
+      if (!flightNumber) {
+        messageBox.textContent = 'נא להזין מספר טיסה לפני הבדיקה';
+        return;
+      }
+
+      resultBox.innerHTML = '';
+      messageBox.textContent = 'בודק סטטוס טיסה, רגע בבקשה...';
+
+      const payload = {
+        flightNumber: flightNumber,
+        flightDate: flightDateInput ? flightDateInput.value : ''
+      };
+
+      callServer('getFlightStatus', payload)
+        .then(result => {
+          if (!result || result.ok === false) {
+            messageBox.textContent = (result && result.error) || 'לא הצלחתי לקבל סטטוס טיסה.';
+            return;
+          }
+
+          messageBox.textContent = '';
+          renderFlightStatus(result);
+        })
+        .catch(err => {
+          messageBox.textContent = 'שגיאה בבדיקת סטטוס הטיסה. נסה שוב.';
+          showError(err);
+        });
+    }
+
+    function renderFlightStatus(result) {
+      const resultBox = document.getElementById('flightStatusResult');
+      if (!resultBox) {
+        return;
+      }
+
+      resultBox.innerHTML = '';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const title = document.createElement('strong');
+      title.textContent = (result.airline || '') + ' ' + (result.flightNumber || '');
+      card.appendChild(title);
+
+      const statusLine = document.createElement('p');
+      statusLine.textContent = 'סטטוס: ' + (flightStatusLabel(result.status) || 'לא ידוע');
+      card.appendChild(statusLine);
+
+      card.appendChild(buildFlightLegLine('המראה', result.departure));
+      card.appendChild(buildFlightLegLine('נחיתה', result.arrival));
+
+      resultBox.appendChild(card);
+    }
+
+    function buildFlightLegLine(label, leg) {
+      const line = document.createElement('p');
+      if (!leg) {
+        line.textContent = label + ': אין מידע';
+        return line;
+      }
+
+      const parts = [];
+      if (leg.airport) parts.push(leg.airport);
+      if (leg.terminal) parts.push('טרמינל ' + leg.terminal);
+      if (leg.gate) parts.push('שער ' + leg.gate);
+      if (leg.actual) parts.push('בפועל: ' + leg.actual);
+      else if (leg.estimated) parts.push('משוער: ' + leg.estimated);
+      else if (leg.scheduled) parts.push('מתוכנן: ' + leg.scheduled);
+      if (leg.delayMinutes) parts.push('עיכוב: ' + leg.delayMinutes + ' דק');
+
+      line.textContent = label + ': ' + (parts.length ? parts.join(' | ') : 'אין מידע');
+      return line;
+    }
+
+    function flightStatusLabel(status) {
+      const map = {
+        Expected: 'מתוכננת',
+        EnRoute: 'באוויר',
+        Landed: 'נחתה',
+        Delayed: 'בעיכוב',
+        Boarding: 'באיסוף נוסעים',
+        GateClosed: 'השער נסגר',
+        Departed: 'המריאה',
+        Arrived: 'נחתה',
+        Canceled: 'מבוטלת',
+        CanceledUncertain: 'כנראה מבוטלת',
+        Diverted: 'הוסטה',
+        Unknown: 'לא ידוע'
+      };
+      return map[status] || status;
+    }
+  </script>
+</body>
+</html>
